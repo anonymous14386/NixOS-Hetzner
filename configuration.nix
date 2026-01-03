@@ -38,13 +38,21 @@
     ];
   };
 
+  # Docker Configuration
+  virtualisation.docker = {
+    enable = true;
+    autoPrune.enable = true; # Automatically clean up unused containers weekly
+  };
+
   # System Settings
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
+  # System Packages
   environment.systemPackages = with pkgs; [
     git
     vim
     wget
+    docker-compose
   ];
 
   system.stateVersion = "24.11";
