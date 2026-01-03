@@ -16,8 +16,8 @@
   # SSH & Networking
   services.openssh = {
     enable = true;
-    port = 49213;
     settings = {
+      Port = 49213;
       PasswordAuthentication = false;
       ChallengeResponseAuthentication = false;
       PermitRootLogin = "prohibit-password";
