@@ -71,7 +71,7 @@
   ];
 
   # Enable sshguard to block repeated SSH offenders
-  security.sshguard.enable = true;
+  services.sshguard.enable = true;
 
   system.stateVersion = "24.11";
 }
