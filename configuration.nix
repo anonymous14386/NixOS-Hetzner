@@ -57,6 +57,7 @@
     vim
     wget
     docker-compose
+    neofetch
   ];
 
   system.stateVersion = "24.11";
