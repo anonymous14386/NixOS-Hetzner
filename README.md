@@ -43,12 +43,12 @@ We use nix run to pull disko directly from GitHub and apply your disk-config.nix
 
 ```nix --experimental-features 'nix-command flakes' run github:nix-community/disko -- --mode disko --flake github:anonymous14386/NixOS-Hetzner#hetzner-server```
 
-#5. Install NixOS
+5. Install NixOS
 
-We use nix run to fetch the nixos-install-tools package temporarily, which allows us to install the system using your remote Flake.
+We use nix shell to temporarily access the nixos-install command. We add --no-write-lock-file because we are installing directly from a remote GitHub URL (which is read-only).
 
-```# --no-root-passwd prevents it from interactively asking for a password 
-# (assuming you set keys/passwords in your flake config). 
-# If you didn't set a password in your config, remove that flag.
+```nix --experimental-features 'nix-command flakes' shell nixpkgs#nixos-install-tools -c nixos-install --root /mnt --no-root-passwd --flake github:anonymous14386/NixOS-Hetzner#hetzner-server --no-write-lock-file```
 
-nix run nixpkgs#nixos-install-tools -- --root /mnt --no-root-passwd --flake github:anonymous14386/NixOS-Hetzner#hetzner-server```
+6. Finish
+
+Reboot into your new NixOS installation.
