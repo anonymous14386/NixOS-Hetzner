@@ -1,14 +1,16 @@
 # NixOS-Hetzner
-installing nixos and configuration instructions for Hetzner dedicated server
+Configuration and installation instructions for a Hetzner Dedicated Server using NixOS Flakes and Disko (RAID 0).
 
-# Prep work
-We will need a blank server for this, I am using a Hetzner Dedicated Server which can be managed through this panel: https://robot.hetzner.com
-
-Click the rescue tab and select Linux then reset and execute a hardware reset. If your ssh key is not set up you will need the password generated to log in
-
-If this doesn't come back up then order a manual power reset and wait, you should receive an email from Hetzner that it was successfull
-
-When the server comes back up you may need to run "ssh-keygen -f '~/.ssh/known_hosts' -R 'ip address'"
-Change the directory if needed and replace 'ip address' with your ip in quotes
+## 1. Preparation
+1. Log into the Hetzner Robot panel: https://robot.hetzner.com
+2. Go to **Rescue** > **Linux** > **Activate rescue system**.
+   - *Tip:* Add your SSH key in the rescue dialog to avoid typing passwords.
+3. Go to **Reset** > **Hardware Reset** (Automatic).
+4. Wait 2-3 minutes, then clear your known hosts (if you've connected to this IP before) and SSH in:
+   ```bash
+   ssh-keygen -f "~/.ssh/known_hosts" -R "YOUR_SERVER_IP"
+   ssh root@YOUR_SERVER_IP
 
 When you get back in the ssh prompt should say "root@rescue ~ #"
+
+
