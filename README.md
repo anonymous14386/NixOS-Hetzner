@@ -10,3 +10,5 @@ If this doesn't come back up then order a manual power reset and wait, you shoul
 
 When the server comes back up you may need to run "ssh-keygen -f '~/.ssh/known_hosts' -R 'ip address'"
 Change the directory if needed and replace 'ip address' with your ip in quotes
+
+When you get back in the ssh prompt should say "root@rescue ~ #"
