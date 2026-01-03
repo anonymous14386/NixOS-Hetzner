@@ -25,6 +25,13 @@
   # Enable nix-command and flakes
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
+  users.users.psychopathy = {
+    isNormalUser = true;
+    description = "Psychopathy";
+    extraGroups = [ "networkmanager" "wheel" ]; # 'wheel' enables sudo
+    packages = with pkgs; [];
+  };
+
   networking.hostName = "octopus-server";
   system.stateVersion = "23.11"; 
 }
