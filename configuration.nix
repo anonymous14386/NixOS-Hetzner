@@ -21,6 +21,10 @@
   
   networking.hostName = "octopus-server";
 
+  # Firewall
+
+  networking.firewall.allowedTCPPorts = [ 22 80 443 81 ];
+
   # User Configuration
   # Root gets keys from GitHub
   users.users.root.openssh.authorizedKeys.keyFiles = [
