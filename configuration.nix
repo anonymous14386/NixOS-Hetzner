@@ -2,7 +2,7 @@
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     ./disk-config.nix
-    ./private.nix
+    /root/nixos-config/private.nix
   ];
 
   # Bootloader
