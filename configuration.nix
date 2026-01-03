@@ -16,14 +16,24 @@
   # SSH & Networking
   services.openssh = {
     enable = true;
-    settings.PasswordAuthentication = false;
+    port = 49213;
+    settings = {
+      PasswordAuthentication = false;
+      ChallengeResponseAuthentication = false;
+      PermitRootLogin = "prohibit-password";
+      PermitEmptyPasswords = false;
+      X11Forwarding = false;
+      UseDNS = false;
+      MaxAuthTries = 3;
+      LoginGraceTime = "30s";
+    };
   };
   
   networking.hostName = "octopus-server";
 
   # Firewall
 
-  networking.firewall.allowedTCPPorts = [ 22 80 443 81 5223 5224];
+  networking.firewall.allowedTCPPorts = [ 49213 80 443 81 5223 5224];
 
   # User Configuration
   # Root gets keys from GitHub
@@ -59,6 +69,9 @@
     docker-compose
     neofetch
   ];
+
+  # Enable sshguard to block repeated SSH offenders
+  security.sshguard.enable = true;
 
   system.stateVersion = "24.11";
 }
