@@ -23,7 +23,7 @@
 
   # Firewall
 
-  networking.firewall.allowedTCPPorts = [ 22 80 443 81 ];
+  networking.firewall.allowedTCPPorts = [ 22 80 443 81 5223 5224];
 
   # User Configuration
   # Root gets keys from GitHub
