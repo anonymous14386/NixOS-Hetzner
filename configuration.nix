@@ -25,6 +25,13 @@
   # Enable nix-command and flakes
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
+  # System packages
+  environment.systemPackages = with pkgs; [
+    git
+    vim
+    wget
+  ];
+
   users.users.psychopathy = {
     isNormalUser = true;
     description = "Psychopathy";
