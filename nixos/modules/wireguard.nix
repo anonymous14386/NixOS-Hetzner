@@ -29,7 +29,7 @@ in
         peers = [
           # example peer stub; replace PUBLIC_KEY with actual client pubkey and the IP
           {
-            publicKey = "Tf4AZqv13MzSxzVXrjgah0CrnJpePHGbjaIDaiIpBho=";
+            publicKey = "u8Q6TonsXOlzzu/5lRLfOFi+HeMw8RqbhwS7KBplQiw=";
             allowedIPs = [ "10.13.13.2/32" ];
           }
         ];
