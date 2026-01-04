@@ -18,6 +18,14 @@ in
         generatePrivateKeyFile = true; # Automatically generate the private key if it doesn't exist
         # To get the public key for client configuration, run the following command on the server:
         # wg show ${wgIface} public-key
+        postSetup = ''
+          ${pkgs.iptables}/bin/iptables -A FORWARD -i ${wgIface} -j ACCEPT
+          ${pkgs.iptables}/bin/iptables -t nat -A POSTROUTING -o enp0s31f6 -j MASQUERADE
+        '';
+        postShutdown = ''
+          ${pkgs.iptables}/bin/iptables -D FORWARD -i ${wgIface} -j ACCEPT
+          ${pkgs.iptables}/bin/iptables -t nat -D POSTROUTING -o enp0s31f6 -j MASQUERADE
+        '';
         peers = [
           # example peer stub; replace PUBLIC_KEY with actual client pubkey and the IP
           {

@@ -28,6 +28,8 @@
     internalInterfaces = [ "wg0" ];
   };
 
+  boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
+
 
   # User Configuration
   # Root gets keys from GitHub
