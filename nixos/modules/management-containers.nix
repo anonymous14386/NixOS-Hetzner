@@ -1,9 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  wgSubnet = "10.13.13.0/24";  # change if you prefer a different WG subnet
   sshPort = 49213;
-  wgPort = 51820;
   docker = pkgs.docker;
 in
 {
@@ -87,14 +85,6 @@ in
       enable = true;
       # Keep SSH allowed publicly (note: set the port itself in your top-level configuration.nix)
       allowedTCPPorts = [ sshPort ];
-      # WireGuard listen port (UDP)
-      allowedUDPPorts = [ wgPort ];
-      # Enforce internal-only for management ports using nft rules:
-      extraCommands = lib.mkForce ''
-        nft add rule inet filter input tcp dport {9000,9443,80,81,443,8081,8082} ip saddr ${wgSubnet} accept
-        nft add rule inet filter input tcp dport {9000,9443,80,81,443,8081,8082} iifname "lo" accept
-        nft add rule inet filter input tcp dport {9000,9443,80,81,443,8081,8082} counter drop
-      '';
     };
 
     # Keep ssh enabled here but do NOT set `port` in this module (avoid evaluation-order errors)

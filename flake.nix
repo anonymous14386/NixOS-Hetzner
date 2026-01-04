@@ -11,7 +11,6 @@
       modules = [
         disko.nixosModules.disko
         ./configuration.nix
-        ./nixos/modules/wireguard.nix
         ./nixos/modules/management-containers.nix
       ];
     };
