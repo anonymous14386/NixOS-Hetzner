@@ -16,7 +16,7 @@
   # SSH & Networking
   services.openssh = {
     enable = true;
-    permitRootLogin = "prohibit-password";  # keep key-only root
+    settings.PermitRootLogin = "prohibit-password";  # keep key-only root
     ports = [ 49213 ];                            # <--- add this line
   };
   
