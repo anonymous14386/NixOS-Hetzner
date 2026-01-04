@@ -66,7 +66,7 @@ in
     # Firewall basics
     networking.firewall = {
       enable = true;
-      allowedTCPPorts = [ sshPort ];
+      allowedTCPPorts = [ sshPort 80 81 443 8081 ];
     };
   };
 }
