@@ -17,7 +17,7 @@
   services.openssh = {
     enable = true;
     permitRootLogin = "prohibit-password";  # keep key-only root
-    port = 49213;                            # <--- add this line
+    ports = [ 49213 ];                            # <--- add this line
   };
   
   networking.hostName = "octopus-server";
