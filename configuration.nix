@@ -7,7 +7,7 @@
 
   # Bootloader
   boot.loader.grub = {
-    enable = true;    
+    enable = true;
     efiSupport = true;
     efiInstallAsRemovable = true;
     devices = [ "/dev/sda" "/dev/sdb" ];
@@ -16,11 +16,17 @@
   # SSH & Networking
   services.openssh = {
     enable = true;
-    permitRootLogin = "prohibit-password";  # keep key-only root
-    port = 49213;                            # <--- add this line
+    settings.PermitRootLogin = "prohibit-password";  # keep key-only root
+    ports = [ 49213 ];                            # <--- add this line
   };
   
   networking.hostName = "octopus-server";
+
+  networking.nat = {
+    enable = true;
+    externalInterface = "enp0s31f6";
+    internalInterfaces = [ "wg0" ];
+  };
 
 
   # User Configuration
