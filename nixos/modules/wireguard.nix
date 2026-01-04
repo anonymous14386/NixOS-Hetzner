@@ -21,7 +21,7 @@ in
         peers = [
           # example peer stub; replace PUBLIC_KEY with actual client pubkey and the IP
           {
-            publicKey = "CLIENT1_PUBLIC_KEY";
+            publicKey = "Tf4AZqv13MzSxzVXrjgah0CrnJpePHGbjaIDaiIpBho=";
             allowedIPs = [ "10.13.13.2/32" ];
           }
         ];
