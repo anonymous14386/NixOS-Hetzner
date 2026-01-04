@@ -28,7 +28,7 @@ in
         ExecStart = "${docker}/bin/docker run --name portainer --rm -p 9000:9000 -p 9443:9443 -v /var/lib/portainer/data:/data -v /var/run/docker.sock:/var/run/docker.sock portainer/portainer-ce:latest";
         ExecStop = "${docker}/bin/docker stop portainer || true";
       };
-      install.wantedBy = [ "multi-user.target" ];
+      wantedBy = [ "multi-user.target" ];
     };
 
     systemd.services.nginx-proxy-manager = {
@@ -45,7 +45,7 @@ in
         ExecStart = "${docker}/bin/docker run --name nginx-proxy-manager --rm -p 80:80 -p 81:81 -p 443:443 -v /var/lib/nginx-proxy-manager/data:/data -v /var/lib/nginx-proxy-manager/letsencrypt:/etc/letsencrypt jc21/nginx-proxy-manager:latest";
         ExecStop = "${docker}/bin/docker stop nginx-proxy-manager || true";
       };
-      install.wantedBy = [ "multi-user.target" ];
+      wantedBy = [ "multi-user.target" ];
     };
 
     systemd.services.money-tracker = {
@@ -62,7 +62,7 @@ in
         ExecStart = "${docker}/bin/docker run --name money-tracker --rm -p 8081:8080 -v /var/lib/money-tracker:/data your-registry/money-tracker:latest";
         ExecStop = "${docker}/bin/docker stop money-tracker || true";
       };
-      install.wantedBy = [ "multi-user.target" ];
+      wantedBy = [ "multi-user.target" ];
     };
 
     systemd.services.workout-tracker = {
@@ -79,7 +79,7 @@ in
         ExecStart = "${docker}/bin/docker run --name workout-tracker --rm -p 8082:8080 -v /var/lib/workout-tracker:/data your-registry/workout-tracker:latest";
         ExecStop = "${docker}/bin/docker stop workout-tracker || true";
       };
-      install.wantedBy = [ "multi-user.target" ];
+      wantedBy = [ "multi-user.target" ];
     };
 
     # Firewall basics
