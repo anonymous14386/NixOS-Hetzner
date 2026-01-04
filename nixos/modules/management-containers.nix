@@ -47,17 +47,17 @@ in
     };
 
     systemd.services.money-tracker = {
-      description = "Money tracker app (placeholder)";
+      description = "Money tracker app";
       wants = [ "docker.service" ];
       after = [ "docker.service" ];
       serviceConfig = {
         Type = "simple";
         Restart = "always";
         ExecStartPre = [
-          "${docker}/bin/docker pull your-registry/money-tracker:latest || true"
+          "${docker}/bin/docker build -t budget-tracker:latest /home/psychopathy/Documents/NixOS-Hetzner/nixos/modules/budget-tracker"
           "${docker}/bin/docker rm -f money-tracker || true"
         ];
-        ExecStart = "${docker}/bin/docker run --name money-tracker --rm -p 8081:8080 -v /var/lib/money-tracker:/data your-registry/money-tracker:latest";
+        ExecStart = "${docker}/bin/docker run --name money-tracker --rm -p 127.0.0.1:8081:3000 -v /var/lib/money-tracker:/usr/src/app budget-tracker:latest";
         ExecStop = "${docker}/bin/docker stop money-tracker || true";
       };
       wantedBy = [ "multi-user.target" ];
