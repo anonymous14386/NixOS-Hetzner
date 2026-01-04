@@ -45,7 +45,7 @@ in
           "${docker}/bin/docker pull jc21/nginx-proxy-manager:latest"
           "${docker}/bin/docker rm -f nginx-proxy-manager || true"
         ];
-        ExecStart = "${docker}/bin/docker run --name nginx-proxy-manager --rm -p 80:80 -p 81:81 -p 443:443 -v /var/lib/nginx-proxy-manager/data:/data -v /var/lib/nginx-proxy-manager/letsencrypt:/etc/letsencrypt --add-host=tailscale-dns:100.100.100.100 jc21/nginx-proxy-manager:latest";
+        ExecStart = "${docker}/bin/docker run --name nginx-proxy-manager --rm -p 80:80 -p 81:81 -p 443:443 -v /var/lib/nginx-proxy-manager/data:/data -v /var/lib/nginx-proxy-manager/letsencrypt:/etc/letsencrypt --add-host=tailscale-dns:100.100.100.100 --dns 100.100.100.100 jc21/nginx-proxy-manager:latest";
         ExecStop = "${docker}/bin/docker stop nginx-proxy-manager || true";
       };
       wantedBy = [ "multi-user.target" ];
