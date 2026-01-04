@@ -11,7 +11,7 @@ in
   config = {
     networking.wireguard.interfaces = {
       "${wgIface}" = {
-        address = [ wgAddress ];
+        ips = [ wgAddress ];
         listenPort = wgListenPort;
         # This example expects you to generate /etc/wireguard/server_privatekey
         privateKeyFile = "/etc/wireguard/server_privatekey";
