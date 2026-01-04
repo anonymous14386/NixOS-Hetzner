@@ -70,11 +70,11 @@ in
       serviceConfig = {
         Type = "simple";
         Restart = "always";
-        ExecStartPre = [
-          "${docker}/bin/docker pull your-registry/workout-tracker:latest || true"
-          "${docker}/bin/docker rm -f workout-tracker || true"
-        ];
-        ExecStart = "${docker}/bin/docker run --name workout-tracker --rm -p 8082:8080 -v /var/lib/workout-tracker:/data your-registry/workout-tracker:latest";
+        # ExecStartPre = [
+        #   "${docker}/bin/docker pull your-registry/workout-tracker:latest || true"
+        #   "${docker}/bin/docker rm -f workout-tracker || true"
+        # ];
+        # ExecStart = "${docker}/bin/docker run --name workout-tracker --rm -p 8082:8080 -v /var/lib/workout-tracker:/data your-registry/workout-tracker:latest";
         ExecStop = "${docker}/bin/docker stop workout-tracker || true";
       };
       wantedBy = [ "multi-user.target" ];
