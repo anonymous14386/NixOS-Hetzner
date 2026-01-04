@@ -3,11 +3,6 @@
 let
   sshPort = 49213;
   docker = pkgs.docker;
-  budgetTrackerSrc = pkgs.stdenv.mkDerivation {
-    name = "budget-tracker-src";
-    src = ./budget-tracker;
-    installPhase = "cp -r . $out";
-  };
 in
 {
   options = { };
@@ -47,23 +42,6 @@ in
         ];
         ExecStart = "${docker}/bin/docker run --name nginx-proxy-manager --rm -p 80:80 -p 81:81 -p 443:443 -v /var/lib/nginx-proxy-manager/data:/data -v /var/lib/nginx-proxy-manager/letsencrypt:/etc/letsencrypt jc21/nginx-proxy-manager:latest";
         ExecStop = "${docker}/bin/docker stop nginx-proxy-manager || true";
-      };
-      wantedBy = [ "multi-user.target" ];
-    };
-
-    systemd.services.money-tracker = {
-      description = "Money tracker app";
-      wants = [ "docker.service" ];
-      after = [ "docker.service" ];
-      serviceConfig = {
-        Type = "simple";
-        Restart = "always";
-        ExecStartPre = [
-          "${docker}/bin/docker build -t budget-tracker:latest ${budgetTrackerSrc}"
-          "${docker}/bin/docker rm -f money-tracker || true"
-        ];
-        ExecStart = "${docker}/bin/docker run --name money-tracker --rm -p 8081:3000 -v /var/lib/money-tracker/data:/usr/src/app/data budget-tracker:latest";
-        ExecStop = "${docker}/bin/docker stop money-tracker || true";
       };
       wantedBy = [ "multi-user.target" ];
     };
