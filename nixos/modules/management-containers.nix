@@ -3,6 +3,11 @@
 let
   sshPort = 49213;
   docker = pkgs.docker;
+  budgetTrackerSrc = pkgs.stdenv.mkDerivation {
+    name = "budget-tracker-src";
+    src = ./budget-tracker;
+    installPhase = "cp -r . $out";
+  };
 in
 {
   options = { };
@@ -54,10 +59,10 @@ in
         Type = "simple";
         Restart = "always";
         ExecStartPre = [
-          "${docker}/bin/docker build -t budget-tracker:latest /home/psychopathy/Documents/NixOS-Hetzner/nixos/modules/budget-tracker"
+          "${docker}/bin/docker build -t budget-tracker:latest ${budgetTrackerSrc}"
           "${docker}/bin/docker rm -f money-tracker || true"
         ];
-        ExecStart = "${docker}/bin/docker run --name money-tracker --rm --network host -v /var/lib/money-tracker:/usr/src/app budget-tracker:latest";
+        ExecStart = "${docker}/bin/docker run --name money-tracker --rm -p 8081:3000 -v /var/lib/money-tracker:/usr/src/app budget-tracker:latest";
         ExecStop = "${docker}/bin/docker stop money-tracker || true";
       };
       wantedBy = [ "multi-user.target" ];
