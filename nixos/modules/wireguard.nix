@@ -15,13 +15,13 @@ in
         listenPort = wgListenPort;
         # This example expects you to generate /etc/wireguard/server_privatekey
         privateKeyFile = "/etc/wireguard/server_privatekey";
-        peers = {
+        peers = [
           # example peer stub; replace PUBLIC_KEY with actual client pubkey and the IP
-          client-1 = {
+          {
             publicKey = "CLIENT1_PUBLIC_KEY";
             allowedIPs = [ "10.13.13.2/32" ];
-          };
-        };
+          }
+        ];
       };
     };
 
