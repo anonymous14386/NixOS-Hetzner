@@ -4,79 +4,96 @@ let
   wgSubnet = "10.13.13.0/24";  # change if you prefer a different WG subnet
   sshPort = 49213;
   wgPort = 51820;
+  docker = pkgs.docker;
 in
 {
   options = { };
 
   config = {
-    # Docker
-    virtualisation.docker = {
-      enable = true;
-      containers = {
-        # Portainer (management UI)
-        portainer = {
-          image = "portainer/portainer-ce:latest";
-          ports = [ "9000:9000" "9443:9443" ];
-          volumes = [
-            "/var/lib/portainer/data:/data"
-            "/var/run/docker.sock:/var/run/docker.sock"
-          ];
-          restartPolicy = "always";
-        };
+    # Enable Docker daemon
+    virtualisation.docker.enable = true;
 
-        # Nginx Proxy Manager
-        nginx-proxy-manager = {
-          image = "jc21/nginx-proxy-manager:latest";
-          ports = [ "80:80" "81:81" "443:443" ];
-          volumes = [
-            "/var/lib/nginx-proxy-manager/data:/data"
-            "/var/lib/nginx-proxy-manager/letsencrypt:/etc/letsencrypt"
-          ];
-          restartPolicy = "always";
-        };
-
-        # Placeholder apps (replace image with your built image)
-        money-tracker = {
-          image = "your-registry/money-tracker:latest";
-          ports = [ "8081:8080" ]; # host:container
-          volumes = [ "/var/lib/money-tracker:/data" ];
-          restartPolicy = "always";
-        };
-
-        workout-tracker = {
-          image = "your-registry/workout-tracker:latest";
-          ports = [ "8082:8080" ];
-          volumes = [ "/var/lib/workout-tracker:/data" ];
-          restartPolicy = "always";
-        };
+    # Services that run containers using the docker CLI (works reliably across nixpkgs)
+    systemd.services.portainer = {
+      description = "Portainer (container manager)";
+      wants = [ "docker.service" ];
+      after = [ "docker.service" ];
+      serviceConfig = {
+        Type = "simple";
+        Restart = "always";
+        ExecStartPre = "${docker}/bin/docker pull portainer/portainer-ce:latest";
+        ExecStartPre = "${docker}/bin/docker rm -f portainer || true";
+        ExecStart = "${docker}/bin/docker run --name portainer --rm -p 9000:9000 -p 9443:9443 -v /var/lib/portainer/data:/data -v /var/run/docker.sock:/var/run/docker.sock portainer/portainer-ce:latest";
+        ExecStop = "${docker}/bin/docker stop portainer || true";
       };
+      install.wantedBy = [ "multi-user.target" ];
+    };
+
+    systemd.services.nginx-proxy-manager = {
+      description = "Nginx Proxy Manager";
+      wants = [ "docker.service" ];
+      after = [ "docker.service" ];
+      serviceConfig = {
+        Type = "simple";
+        Restart = "always";
+        ExecStartPre = "${docker}/bin/docker pull jc21/nginx-proxy-manager:latest";
+        ExecStartPre = "${docker}/bin/docker rm -f nginx-proxy-manager || true";
+        ExecStart = "${docker}/bin/docker run --name nginx-proxy-manager --rm -p 80:80 -p 81:81 -p 443:443 -v /var/lib/nginx-proxy-manager/data:/data -v /var/lib/nginx-proxy-manager/letsencrypt:/etc/letsencrypt jc21/nginx-proxy-manager:latest";
+        ExecStop = "${docker}/bin/docker stop nginx-proxy-manager || true";
+      };
+      install.wantedBy = [ "multi-user.target" ];
+    };
+
+    systemd.services.money-tracker = {
+      description = "Money tracker app (placeholder)";
+      wants = [ "docker.service" ];
+      after = [ "docker.service" ];
+      serviceConfig = {
+        Type = "simple";
+        Restart = "always";
+        ExecStartPre = "${docker}/bin/docker pull your-registry/money-tracker:latest || true";
+        ExecStartPre = "${docker}/bin/docker rm -f money-tracker || true";
+        ExecStart = "${docker}/bin/docker run --name money-tracker --rm -p 8081:8080 -v /var/lib/money-tracker:/data your-registry/money-tracker:latest";
+        ExecStop = "${docker}/bin/docker stop money-tracker || true";
+      };
+      install.wantedBy = [ "multi-user.target" ];
+    };
+
+    systemd.services.workout-tracker = {
+      description = "Workout tracker app (placeholder)";
+      wants = [ "docker.service" ];
+      after = [ "docker.service" ];
+      serviceConfig = {
+        Type = "simple";
+        Restart = "always";
+        ExecStartPre = "${docker}/bin/docker pull your-registry/workout-tracker:latest || true";
+        ExecStartPre = "${docker}/bin/docker rm -f workout-tracker || true";
+        ExecStart = "${docker}/bin/docker run --name workout-tracker --rm -p 8082:8080 -v /var/lib/workout-tracker:/data your-registry/workout-tracker:latest";
+        ExecStop = "${docker}/bin/docker stop workout-tracker || true";
+      };
+      install.wantedBy = [ "multi-user.target" ];
     };
 
     # Firewall basics
     networking.firewall = {
       enable = true;
-      # Keep SSH allowed publicly
+      # Keep SSH allowed publicly (note: set the port itself in your top-level configuration.nix)
       allowedTCPPorts = [ sshPort ];
       # WireGuard listen port (UDP)
       allowedUDPPorts = [ wgPort ];
-      # We enforce "internal-only" for management ports using nft rules below:
+      # Enforce internal-only for management ports using nft rules:
       extraCommands = lib.mkForce ''
-        # Allow WG subnet and loopback to access management ports (Portainer, NPM, apps)
-        # Replace inet -> ip if you only want IPv4, but inet covers both families.
         nft add rule inet filter input tcp dport {9000,9443,80,81,443,8081,8082} ip saddr ${wgSubnet} accept
         nft add rule inet filter input tcp dport {9000,9443,80,81,443,8081,8082} iifname "lo" accept
         nft add rule inet filter input tcp dport {9000,9443,80,81,443,8081,8082} counter drop
       '';
     };
 
-    # Optional: enable sshguard if you already have it enabled elsewhere - keep as is
-    # Do not set sshd port here to avoid evaluation-order issues; set services.openssh.port in your primary configuration.nix instead.
+    # Keep ssh enabled here but do NOT set `port` in this module (avoid evaluation-order errors)
     services.openssh = {
       enable = true;
       permitRootLogin = "prohibit-password"; # key-only root
-      # port intentionally NOT set here to avoid evaluation errors; set in your top-level configuration if desired
     };
 
-    # WireGuard configuration is split to its own module/file (see next file block)
   };
 }
