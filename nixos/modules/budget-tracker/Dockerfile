@@ -7,6 +7,9 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm install
 
+# Create data directory and change ownership
+RUN mkdir -p data && chown node:node data
+
 # Bundle app source
 COPY . .
 
