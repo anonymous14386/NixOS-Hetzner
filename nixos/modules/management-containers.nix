@@ -69,12 +69,14 @@ in
       '';
     };
 
+    # Optional: enable sshguard if you already have it enabled elsewhere - keep as is
+    # Do not set sshd port here to avoid evaluation-order issues; set services.openssh.port in your primary configuration.nix instead.
     services.openssh = {
       enable = true;
       permitRootLogin = "prohibit-password"; # key-only root
-      port = sshPort;
+      # port intentionally NOT set here to avoid evaluation errors; set in your top-level configuration if desired
     };
 
-    # WireGuard configuration is split to its own module/file
+    # WireGuard configuration is split to its own module/file (see next file block)
   };
 }
