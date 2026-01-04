@@ -90,10 +90,5 @@ in
     };
 
     # Keep ssh enabled here but do NOT set `port` in this module (avoid evaluation-order errors)
-    services.openssh = {
-      enable = true;
-      permitRootLogin = "prohibit-password"; # key-only root
-    };
-
   };
 }
