@@ -1,10 +1,11 @@
 const { Sequelize, DataTypes } = require('sequelize');
+const path = require('path');
 
 const getDatabase = (username) => {
     // Initialize Sequelize with SQLite
     const sequelize = new Sequelize({
         dialect: 'sqlite',
-        storage: `./${username}_database.sqlite`
+        storage: path.join(__dirname, 'data', `${username}_database.sqlite`)
     });
 
     // Define the models
