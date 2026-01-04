@@ -15,6 +15,9 @@ in
         listenPort = wgListenPort;
         # This example expects you to generate /etc/wireguard/server_privatekey
         privateKeyFile = "/etc/wireguard/server_privatekey";
+        generatePrivateKeyFile = true; # Automatically generate the private key if it doesn't exist
+        # To get the public key for client configuration, run the following command on the server:
+        # wg show ${wgIface} public-key
         peers = [
           # example peer stub; replace PUBLIC_KEY with actual client pubkey and the IP
           {
