@@ -57,7 +57,7 @@ in
           "${docker}/bin/docker build -t budget-tracker:latest /home/psychopathy/Documents/NixOS-Hetzner/nixos/modules/budget-tracker"
           "${docker}/bin/docker rm -f money-tracker || true"
         ];
-        ExecStart = "${docker}/bin/docker run --name money-tracker --rm -p 127.0.0.1:8081:3000 -v /var/lib/money-tracker:/usr/src/app budget-tracker:latest";
+        ExecStart = "${docker}/bin/docker run --name money-tracker --rm --network host -v /var/lib/money-tracker:/usr/src/app budget-tracker:latest";
         ExecStop = "${docker}/bin/docker stop money-tracker || true";
       };
       wantedBy = [ "multi-user.target" ];
