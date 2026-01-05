@@ -60,7 +60,7 @@
     wget
     docker-compose
     neofetch
-    tailscale # <--- Added this line
+    tailscale
   ];
 
   system.stateVersion = "24.11";
