@@ -60,10 +60,16 @@
     git
     vim
     wget
+    curl
     docker-compose
     neofetch
     tailscale
     openssl
+    jq
+    gnugrep
+    gnused
+    gawk
+    coreutils
   ];
 
   system.stateVersion = "24.11";
