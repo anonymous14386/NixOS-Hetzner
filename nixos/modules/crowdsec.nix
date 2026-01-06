@@ -18,16 +18,8 @@
     ];
   };
 
-  # Crowdsec bouncer for firewall integration
-  services.crowdsec-firewall-bouncer.enable = true;
-  
-  # Enable local API by configuring it properly
-  environment.etc."crowdsec/config.yaml.local".text = ''
-    api:
-      server:
-        enable: true
-        listen_uri: 127.0.0.1:8080
-  '';
+  # Note: Firewall bouncer disabled - using fail2ban for blocking
+  # Crowdsec will only detect and send email alerts
 
   # Email notification configuration
   environment.etc."crowdsec/notifications/email.yaml".text = ''
