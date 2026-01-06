@@ -13,78 +13,73 @@
     ];
 
     jails = {
-      # SSH protection
-      sshd = ''
-        enabled = true
-        port = 49213
-        filter = sshd
-        maxretry = 3
-        findtime = 600
-        bantime = 3600
-        action = iptables[name=SSH, port=49213, protocol=tcp]
-      '';
-
-      # Aggressive SSH bruteforce protection
-      sshd-aggressive = ''
-        enabled = true
-        port = 49213
-        filter = sshd
-        maxretry = 5
-        findtime = 3600
-        bantime = 86400
-        action = iptables[name=SSH-AGG, port=49213, protocol=tcp]
-      '';
-
-      # HTTP rate limiting (for your web services)
-      http-get-dos = ''
-        enabled = true
-        port = http,https
-        filter = http-get-dos
-        maxretry = 300
-        findtime = 300
-        bantime = 600
-        action = iptables-multiport[name=HTTP, port="http,https", protocol=tcp]
-      '';
-
-      # Nginx bad bots
-      nginx-bad-request = ''
-        enabled = true
-        port = http,https
-        filter = nginx-bad-request
-        maxretry = 2
-        findtime = 600
-        bantime = 3600
-      '';
-
-      # Email server protection (will be active once Mailcow is running)
-      postfix = ''
-        enabled = true
-        port = smtp,465,submission
-        filter = postfix
-        maxretry = 3
-        findtime = 600
-        bantime = 3600
-      '';
-
-      postfix-sasl = ''
-        enabled = true
-        port = smtp,465,submission,imap,imaps,pop3,pop3s
-        filter = postfix[mode=auth]
-        maxretry = 3
-        findtime = 600
-        bantime = 3600
-      '';
-
-      dovecot = ''
-        enabled = true
-        port = pop3,pop3s,imap,imaps,submission,465,sieve
-        filter = dovecot
-        maxretry = 3
-        findtime = 600
-        bantime = 3600
-      '';
+      # SSH protection - override default with custom port
+      sshd.settings = {
+        enabled = true;
+        port = "49213";
+        maxretry = 3;
+        findtime = 600;
+        bantime = 3600;
+      };
     };
   };
+
+  # Additional fail2ban jails via raw config
+  environment.etc."fail2ban/jail.d/custom.local".text = ''
+    [sshd-aggressive]
+    enabled = true
+    port = 49213
+    filter = sshd
+    maxretry = 5
+    findtime = 3600
+    bantime = 86400
+    logpath = /var/log/auth.log
+
+    [http-get-dos]
+    enabled = true
+    port = http,https
+    filter = http-get-dos
+    maxretry = 300
+    findtime = 300
+    bantime = 600
+    logpath = /var/log/nginx/access.log
+
+    [nginx-bad-request]
+    enabled = true
+    port = http,https
+    filter = nginx-bad-request
+    maxretry = 2
+    findtime = 600
+    bantime = 3600
+    logpath = /var/log/nginx/access.log
+
+    [postfix]
+    enabled = true
+    port = smtp,465,submission
+    filter = postfix
+    maxretry = 3
+    findtime = 600
+    bantime = 3600
+    logpath = /var/log/mail.log
+
+    [postfix-sasl]
+    enabled = true
+    port = smtp,465,submission,imap,imaps,pop3,pop3s
+    filter = postfix[mode=auth]
+    maxretry = 3
+    findtime = 600
+    bantime = 3600
+    logpath = /var/log/mail.log
+
+    [dovecot]
+    enabled = true
+    port = pop3,pop3s,imap,imaps,submission,465,sieve
+    filter = dovecot
+    maxretry = 3
+    findtime = 600
+    bantime = 3600
+    logpath = /var/log/mail.log
+  '';
 
   # Custom fail2ban filters
   environment.etc = {
