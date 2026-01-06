@@ -5,9 +5,6 @@
   services.crowdsec = {
     enable = true;
     
-    # Enable local API for bouncer integration
-    allowLocalJWTAuthentication = true;
-    
     # Configure log sources (acquisitions)
     localConfig.acquisitions = [
       {
@@ -23,6 +20,14 @@
 
   # Crowdsec bouncer for firewall integration
   services.crowdsec-firewall-bouncer.enable = true;
+  
+  # Enable local API by configuring it properly
+  environment.etc."crowdsec/config.yaml.local".text = ''
+    api:
+      server:
+        enable: true
+        listen_uri: 127.0.0.1:8080
+  '';
 
   # Email notification configuration
   environment.etc."crowdsec/notifications/email.yaml".text = ''
