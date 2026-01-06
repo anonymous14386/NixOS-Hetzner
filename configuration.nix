@@ -5,7 +5,7 @@
     /root/nixos-config/private.nix
     ./nixos/modules/mail-server.nix
     ./nixos/modules/security.nix
-    ./nixos/modules/crowdsec.nix
+    # ./nixos/modules/crowdsec.nix  # Disabled - NixOS module has issues
   ];
 
   # Bootloader
