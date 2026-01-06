@@ -6,27 +6,27 @@
     enable = true;
     
     # Configure log sources (acquisitions)
-    localConfig = {
-      acquisitions = [
-        {
-          filenames = [ "/var/log/auth.log" ];
-          labels.type = "syslog";
-        }
-        {
-          filenames = [ "/var/log/nginx/*.log" ];
-          labels.type = "nginx";
-        }
-      ];
-      
-      # API client configuration
-      api.client = {
-        credentials_path = "/var/lib/crowdsec/data/local_api_credentials.yaml";
-      };
-    };
+    localConfig.acquisitions = [
+      {
+        filenames = [ "/var/log/auth.log" ];
+        labels.type = "syslog";
+      }
+      {
+        filenames = [ "/var/log/nginx/*.log" ];
+        labels.type = "nginx";
+      }
+    ];
   };
 
   # Note: Firewall bouncer disabled - using fail2ban for blocking
   # Crowdsec will only detect and send email alerts
+  
+  # Configure API client manually
+  environment.etc."crowdsec/config.yaml.local".text = ''
+    api:
+      client:
+        credentials_path: /var/lib/crowdsec/data/local_api_credentials.yaml
+  '';
 
   # Email notification configuration
   environment.etc."crowdsec/notifications/email.yaml".text = ''
