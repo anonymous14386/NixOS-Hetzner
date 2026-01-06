@@ -63,6 +63,7 @@
     docker-compose
     neofetch
     tailscale
+    openssl
   ];
 
   system.stateVersion = "24.11";
