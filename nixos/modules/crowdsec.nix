@@ -7,27 +7,21 @@
     
     # Configure log sources (acquisitions)
     settings = {
-      crowdsec_service.acquisition_path = "/etc/crowdsec/acquis.d";
+      acquisitions = [
+        {
+          filenames = [ "/var/log/auth.log" ];
+          labels.type = "syslog";
+        }
+        {
+          filenames = [ "/var/log/nginx/*.log" ];
+          labels.type = "nginx";
+        }
+      ];
     };
   };
 
   # Crowdsec bouncer for firewall integration
   services.crowdsec-firewall-bouncer.enable = true;
-
-  # Configure log acquisitions
-  environment.etc."crowdsec/acquis.d/sshd.yaml".text = ''
-    filenames:
-      - /var/log/auth.log
-    labels:
-      type: syslog
-  '';
-
-  environment.etc."crowdsec/acquis.d/nginx.yaml".text = ''
-    filenames:
-      - /var/log/nginx/*.log
-    labels:
-      type: nginx
-  '';
 
   # Email notification configuration
   environment.etc."crowdsec/notifications/email.yaml".text = ''
