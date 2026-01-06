@@ -6,18 +6,16 @@
     enable = true;
     
     # Configure log sources (acquisitions)
-    settings = {
-      acquisitions = [
-        {
-          filenames = [ "/var/log/auth.log" ];
-          labels.type = "syslog";
-        }
-        {
-          filenames = [ "/var/log/nginx/*.log" ];
-          labels.type = "nginx";
-        }
-      ];
-    };
+    localConfig.acquisitions = [
+      {
+        filenames = [ "/var/log/auth.log" ];
+        labels.type = "syslog";
+      }
+      {
+        filenames = [ "/var/log/nginx/*.log" ];
+        labels.type = "nginx";
+      }
+    ];
   };
 
   # Crowdsec bouncer for firewall integration
