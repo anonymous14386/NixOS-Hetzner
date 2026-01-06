@@ -5,6 +5,9 @@
   services.crowdsec = {
     enable = true;
     
+    # Enable local API for bouncer integration
+    allowLocalJWTAuthentication = true;
+    
     # Configure log sources (acquisitions)
     localConfig.acquisitions = [
       {
