@@ -29,18 +29,6 @@ in
       wantedBy = [ "multi-user.target" ];
     };
 
-    systemd.services.workout-tracker = {
-      description = "Workout tracker app (placeholder)";
-      wants = [ "docker.service" ];
-      after = [ "docker.service" ];
-      serviceConfig = {
-        Type = "simple";
-        Restart = "always";
-        ExecStop = "${docker}/bin/docker stop workout-tracker || true";
-      };
-      wantedBy = [ "multi-user.target" ];
-    };
-
     # Firewall basics
     networking.firewall = {
       enable = true;
