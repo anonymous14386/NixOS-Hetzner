@@ -6,7 +6,7 @@
     enable = true;
     
     # Configure log sources (acquisitions)
-    acquisitions = [
+    localConfig.acquisitions = [
       {
         filenames = [ "/var/log/auth.log" ];
         labels.type = "syslog";
