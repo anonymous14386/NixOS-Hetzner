@@ -6,33 +6,33 @@
     enable = true;
     
     # Configure log sources (acquisitions)
-    localConfig.acquisitions = [
-      {
-        filenames = [ "/var/log/auth.log" ];
-        labels.type = "syslog";
-      }
-      {
-        filenames = [ "/var/log/nginx/*.log" ];
-        labels.type = "nginx";
-      }
-    ];
+    localConfig = {
+      acquisitions = [
+        {
+          filenames = [ "/var/log/auth.log" ];
+          labels.type = "syslog";
+        }
+        {
+          filenames = [ "/var/log/nginx/*.log" ];
+          labels.type = "nginx";
+        }
+      ];
+      
+      # API configuration
+      api = {
+        client = {
+          credentials_path = "/var/lib/crowdsec/data/local_api_credentials.yaml";
+        };
+        server = {
+          enable = true;
+          listen_uri = "127.0.0.1:8080";
+        };
+      };
+    };
   };
 
   # Note: Firewall bouncer disabled - using fail2ban for blocking
   # Crowdsec will only detect and send email alerts
-  
-  # Configure API client manually
-  environment.etc."crowdsec/config.yaml.local".text = ''
-    api:
-      client:
-        credentials_path: /var/lib/crowdsec/data/local_api_credentials.yaml
-  '';
-  
-  # Point to custom notification and profile locations
-  systemd.services.crowdsec.environment = {
-    NOTIFICATIONS_DIR = "/var/lib/crowdsec/notifications";
-    PROFILES_PATH = "/var/lib/crowdsec/profiles.yaml";
-  };
 
   # Install common scenarios
   systemd.services.crowdsec-install-scenarios = {
