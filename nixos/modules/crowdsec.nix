@@ -5,20 +5,29 @@
   services.crowdsec = {
     enable = true;
     
-    # Enable collections for various attack types
+    # Configure log sources (acquisitions)
     settings = {
-      api.server = {
-        enable = true;
-        listen_uri = "127.0.0.1:8080";
-      };
-      
-      # Auto-update threat intelligence
-      cscli.hub_update_interval = "24h";
+      crowdsec_service.acquisition_path = "/etc/crowdsec/acquis.d";
     };
   };
 
   # Crowdsec bouncer for firewall integration
   services.crowdsec-firewall-bouncer.enable = true;
+
+  # Configure log acquisitions
+  environment.etc."crowdsec/acquis.d/sshd.yaml".text = ''
+    filenames:
+      - /var/log/auth.log
+    labels:
+      type: syslog
+  '';
+
+  environment.etc."crowdsec/acquis.d/nginx.yaml".text = ''
+    filenames:
+      - /var/log/nginx/*.log
+    labels:
+      type: nginx
+  '';
 
   # Email notification configuration
   environment.etc."crowdsec/notifications/email.yaml".text = ''
