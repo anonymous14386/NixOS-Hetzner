@@ -3,6 +3,7 @@
     (modulesPath + "/installer/scan/not-detected.nix")
     ./disk-config.nix
     /root/nixos-config/private.nix
+    ./nixos/modules/mail-server.nix
   ];
 
   # Bootloader
