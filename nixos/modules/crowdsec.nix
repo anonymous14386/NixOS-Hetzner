@@ -6,29 +6,16 @@
     enable = true;
     
     # Configure log sources (acquisitions)
-    localConfig = {
-      acquisitions = [
-        {
-          filenames = [ "/var/log/auth.log" ];
-          labels.type = "syslog";
-        }
-        {
-          filenames = [ "/var/log/nginx/*.log" ];
-          labels.type = "nginx";
-        }
-      ];
-      
-      # API configuration
-      api = {
-        client = {
-          credentials_path = "/var/lib/crowdsec/data/local_api_credentials.yaml";
-        };
-        server = {
-          enable = true;
-          listen_uri = "127.0.0.1:8080";
-        };
-      };
-    };
+    acquisitions = [
+      {
+        filenames = [ "/var/log/auth.log" ];
+        labels.type = "syslog";
+      }
+      {
+        filenames = [ "/var/log/nginx/*.log" ];
+        labels.type = "nginx";
+      }
+    ];
   };
 
   # Note: Firewall bouncer disabled - using fail2ban for blocking
