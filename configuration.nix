@@ -5,6 +5,7 @@
     /root/nixos-config/private.nix
     ./nixos/modules/mail-server.nix
     ./nixos/modules/security.nix
+    ./nixos/modules/crowdsec.nix
   ];
 
   # Bootloader
